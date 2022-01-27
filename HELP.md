@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.liweng42.tiger-api' is invalid and this project uses 'com.liweng42.tigerapi' instead.
+* The original package name 'com.tigerapi.tiger-api' is invalid and this project uses 'com.tigerapi.tigerapi' instead.
 
 # Getting Started
 
