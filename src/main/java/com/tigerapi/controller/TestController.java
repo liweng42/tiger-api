@@ -3,6 +3,7 @@ package com.tigerapi.controller;
 import com.tigerapi.common.core.domain.AjaxResult;
 import com.tigerapi.common.core.domain.entity.SysUser;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -72,5 +73,15 @@ public class TestController {
         ajax.put("userList", userlist);
         ajax.put("userList2", userlist2);
         return ajax;
+    }
+
+    @GetMapping("/error")
+    public AjaxResult error(){
+        return AjaxResult.error();
+    }
+
+    @GetMapping("/error2")
+    public AjaxResult error2(){
+        return AjaxResult.error("XXX操作发生错误！");
     }
 }
