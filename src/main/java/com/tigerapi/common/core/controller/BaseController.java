@@ -1,6 +1,10 @@
 package com.tigerapi.common.core.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.tigerapi.common.constant.HttpStatus;
 import com.tigerapi.common.core.domain.AjaxResult;
+import com.tigerapi.common.core.page.TableDataInfo;
+import com.tigerapi.common.utils.PageUtils;
 import com.tigerapi.common.utils.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -16,6 +20,28 @@ import java.util.List;
  * @Since 2022/1/27
  */
 public class BaseController {
+
+    /**
+     * 设置请求分页数据
+     */
+    protected void startPage()
+    {
+        PageUtils.startPage();
+    }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
 
     /**
      * 返回成功

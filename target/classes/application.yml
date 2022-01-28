@@ -1,2 +1,28 @@
 server:
   port: 8181
+
+spring:
+  datasource:
+    url: jdbc:mysql://39.106.169.170:3306/tiger_api?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: yy6iYD23$5
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath*:com/**/mapper/*.xml
+  # ?????????
+  configLocation: classpath:mybatis/mybatis-config.xml
+
+# PageHelper????
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com.tigerapi.mapper: debug #??sql
