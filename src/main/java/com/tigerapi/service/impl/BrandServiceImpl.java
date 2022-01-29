@@ -37,8 +37,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<Brand> findAll() {
-        BrandExample example = new BrandExample();
-        return this.brandMapper.selectByExample(example);
+        return this.brandMapper.selectByExample(new BrandExample());
     }
 
 //    /**
