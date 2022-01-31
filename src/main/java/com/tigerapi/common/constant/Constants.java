@@ -163,4 +163,9 @@ public class Constants {
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.ruoyi.common.utils.file" };
+
+    /**
+     * 用户默认的角色
+     */
+    public static final String ROLE_MEMBER = "ROLE_MEMBER";
 }

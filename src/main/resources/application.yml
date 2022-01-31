@@ -13,10 +13,10 @@ mybatis:
   mapper-locations:
     - classpath:mapper/*.xml
     - classpath*:com/**/mapper/*.xml
-  # ?????????
+  # 加载全局的配置文件
   configLocation: classpath:mybatis/mybatis-config.xml
 
-# PageHelper????
+# PageHelper分页插件
 pagehelper:
   helperDialect: mysql
   reasonable: true
@@ -25,4 +25,14 @@ pagehelper:
 
 logging:
   level:
-    com.tigerapi.mapper: debug #??sql
+    com.tigerapi.mapper: debug #打印sql
+
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30

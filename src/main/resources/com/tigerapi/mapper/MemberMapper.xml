@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tigerapi.mapper.SocialAccountMapper">
-  <resultMap id="BaseResultMap" type="com.tigerapi.entity.SocialAccount">
+<mapper namespace="com.tigerapi.mapper.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.tigerapi.entity.Member">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="member_id" jdbcType="BIGINT" property="memberId" />
-    <result column="unique_id" jdbcType="VARCHAR" property="uniqueId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-    <result column="session_key" jdbcType="VARCHAR" property="sessionKey" />
-    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-    <result column="gender" jdbcType="BOOLEAN" property="gender" />
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
-    <result column="province" jdbcType="VARCHAR" property="province" />
-    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -77,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, member_id, unique_id, phone_number, session_key, nick_name, gender, avatar_url, 
-    country, province, city, create_by, create_time, update_by, update_time
+    id, user_name, `password`, email, phone_number, avatar_url, salt, create_by, create_time, 
+    update_by, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.tigerapi.entity.SocialAccountExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.tigerapi.entity.MemberExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from social_account
+    from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,63 +93,49 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from social_account
+    from member
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from social_account
+    delete from member
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.tigerapi.entity.SocialAccountExample">
-    delete from social_account
+  <delete id="deleteByExample" parameterType="com.tigerapi.entity.MemberExample">
+    delete from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.SocialAccount" useGeneratedKeys="true">
-    insert into social_account (member_id, unique_id, phone_number, 
-      session_key, nick_name, gender, 
-      avatar_url, country, province, 
-      city, create_by, create_time, 
-      update_by, update_time)
-    values (#{memberId,jdbcType=BIGINT}, #{uniqueId,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
-      #{sessionKey,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=BOOLEAN}, 
-      #{avatarUrl,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.Member" useGeneratedKeys="true">
+    insert into member (user_name, `password`, email, 
+      phone_number, avatar_url, salt, 
+      create_by, create_time, update_by, 
+      update_time)
+    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{phoneNumber,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.SocialAccount" useGeneratedKeys="true">
-    insert into social_account
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.Member" useGeneratedKeys="true">
+    insert into member
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="memberId != null">
-        member_id,
+      <if test="userName != null">
+        user_name,
       </if>
-      <if test="uniqueId != null">
-        unique_id,
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="email != null">
+        email,
       </if>
       <if test="phoneNumber != null">
         phone_number,
       </if>
-      <if test="sessionKey != null">
-        session_key,
-      </if>
-      <if test="nickName != null">
-        nick_name,
-      </if>
-      <if test="gender != null">
-        gender,
-      </if>
       <if test="avatarUrl != null">
         avatar_url,
       </if>
-      <if test="country != null">
-        country,
-      </if>
-      <if test="province != null">
-        province,
-      </if>
-      <if test="city != null">
-        city,
+      <if test="salt != null">
+        salt,
       </if>
       <if test="createBy != null">
         create_by,
@@ -169,35 +151,23 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="memberId != null">
-        #{memberId,jdbcType=BIGINT},
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="uniqueId != null">
-        #{uniqueId,jdbcType=VARCHAR},
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         #{phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="sessionKey != null">
-        #{sessionKey,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        #{gender,jdbcType=BOOLEAN},
-      </if>
       <if test="avatarUrl != null">
         #{avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
-        #{country,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        #{city,jdbcType=VARCHAR},
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         #{createBy,jdbcType=VARCHAR},
@@ -213,47 +183,35 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.tigerapi.entity.SocialAccountExample" resultType="java.lang.Long">
-    select count(*) from social_account
+  <select id="countByExample" parameterType="com.tigerapi.entity.MemberExample" resultType="java.lang.Long">
+    select count(*) from member
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update social_account
+    update member
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.memberId != null">
-        member_id = #{record.memberId,jdbcType=BIGINT},
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
       </if>
-      <if test="record.uniqueId != null">
-        unique_id = #{record.uniqueId,jdbcType=VARCHAR},
+      <if test="record.password != null">
+        `password` = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.phoneNumber != null">
         phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.sessionKey != null">
-        session_key = #{record.sessionKey,jdbcType=VARCHAR},
-      </if>
-      <if test="record.nickName != null">
-        nick_name = #{record.nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.gender != null">
-        gender = #{record.gender,jdbcType=BOOLEAN},
-      </if>
       <if test="record.avatarUrl != null">
         avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.country != null">
-        country = #{record.country,jdbcType=VARCHAR},
-      </if>
-      <if test="record.province != null">
-        province = #{record.province,jdbcType=VARCHAR},
-      </if>
-      <if test="record.city != null">
-        city = #{record.city,jdbcType=VARCHAR},
+      <if test="record.salt != null">
+        salt = #{record.salt,jdbcType=VARCHAR},
       </if>
       <if test="record.createBy != null">
         create_by = #{record.createBy,jdbcType=VARCHAR},
@@ -273,18 +231,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update social_account
+    update member
     set id = #{record.id,jdbcType=BIGINT},
-      member_id = #{record.memberId,jdbcType=BIGINT},
-      unique_id = #{record.uniqueId,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      `password` = #{record.password,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
-      session_key = #{record.sessionKey,jdbcType=VARCHAR},
-      nick_name = #{record.nickName,jdbcType=VARCHAR},
-      gender = #{record.gender,jdbcType=BOOLEAN},
       avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
-      country = #{record.country,jdbcType=VARCHAR},
-      province = #{record.province,jdbcType=VARCHAR},
-      city = #{record.city,jdbcType=VARCHAR},
+      salt = #{record.salt,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
@@ -293,38 +247,26 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.tigerapi.entity.SocialAccount">
-    update social_account
+  <update id="updateByPrimaryKeySelective" parameterType="com.tigerapi.entity.Member">
+    update member
     <set>
-      <if test="memberId != null">
-        member_id = #{memberId,jdbcType=BIGINT},
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
       </if>
-      <if test="uniqueId != null">
-        unique_id = #{uniqueId,jdbcType=VARCHAR},
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         phone_number = #{phoneNumber,jdbcType=VARCHAR},
       </if>
-      <if test="sessionKey != null">
-        session_key = #{sessionKey,jdbcType=VARCHAR},
-      </if>
-      <if test="nickName != null">
-        nick_name = #{nickName,jdbcType=VARCHAR},
-      </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=BOOLEAN},
-      </if>
       <if test="avatarUrl != null">
         avatar_url = #{avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="country != null">
-        country = #{country,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null">
-        province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null">
-        city = #{city,jdbcType=VARCHAR},
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         create_by = #{createBy,jdbcType=VARCHAR},
@@ -341,22 +283,29 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.tigerapi.entity.SocialAccount">
-    update social_account
-    set member_id = #{memberId,jdbcType=BIGINT},
-      unique_id = #{uniqueId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.tigerapi.entity.Member">
+    update member
+    set user_name = #{userName,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      session_key = #{sessionKey,jdbcType=VARCHAR},
-      nick_name = #{nickName,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=BOOLEAN},
       avatar_url = #{avatarUrl,jdbcType=VARCHAR},
-      country = #{country,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <sql id="selectMemberVo">
+    select * from
+  </sql>
+
+  <select id="selectByUserName" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from member
+    where user_name = #{userName}
+  </select>
 </mapper>

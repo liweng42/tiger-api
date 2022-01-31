@@ -16,28 +16,10 @@ public class SocialAccount implements Serializable {
     private Long id;
 
     /**
-     * 创建人
+     * 会员id
      */
-    @ApiModelProperty(value="创建人")
-    private String createBy;
-
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty(value="创建时间")
-    private Date createTime;
-
-    /**
-     * 修改人
-     */
-    @ApiModelProperty(value="修改人")
-    private String updateBy;
-
-    /**
-     * 修改时间
-     */
-    @ApiModelProperty(value="修改时间")
-    private Date updateTime;
+    @ApiModelProperty(value="会员id")
+    private Long memberId;
 
     /**
      * 微信的openid或unionid
@@ -49,7 +31,7 @@ public class SocialAccount implements Serializable {
      * 手机号
      */
     @ApiModelProperty(value="手机号")
-    private String mobile;
+    private String phoneNumber;
 
     /**
      * 微信的session_key
@@ -94,10 +76,28 @@ public class SocialAccount implements Serializable {
     private String city;
 
     /**
-     * 删除状态，0：未删除，1：已删除
+     * 创建人
      */
-    @ApiModelProperty(value="删除状态，0：未删除，1：已删除")
-    private Boolean isDeleted;
+    @ApiModelProperty(value="创建人")
+    private String createBy;
+
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value="创建时间")
+    private Date createTime;
+
+    /**
+     * 修改人
+     */
+    @ApiModelProperty(value="修改人")
+    private String updateBy;
+
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value="修改时间")
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 }

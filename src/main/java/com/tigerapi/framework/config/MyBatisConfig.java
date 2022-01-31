@@ -1,4 +1,4 @@
-package com.tigerapi.config;
+package com.tigerapi.framework.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
