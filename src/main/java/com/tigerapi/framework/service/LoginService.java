@@ -1,23 +1,27 @@
 package com.tigerapi.framework.service;
 
 import javax.annotation.Resource;
+
+import com.alibaba.fastjson.JSONObject;
+import com.tigerapi.common.utils.StringUtils;
+import com.tigerapi.entity.Member;
+import com.tigerapi.service.MemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import com.tigerapi.common.constant.Constants;
 //import com.tigerapi.common.core.domain.entity.SysUser;
 import com.tigerapi.common.core.domain.model.LoginUser;
 //import com.tigerapi.common.core.redis.RedisCache;
 import com.tigerapi.common.exception.ServiceException;
+import org.springframework.util.Assert;
 //import com.tigerapi.common.exception.user.CaptchaException;
 //import com.tigerapi.common.exception.user.CaptchaExpireException;
 //import com.tigerapi.common.exception.user.UserPasswordNotMatchException;
-import com.tigerapi.common.utils.DateUtils;
 //import com.tigerapi.common.utils.MessageUtils;
-import com.tigerapi.common.utils.ServletUtils;
+
 //import com.tigerapi.common.utils.ip.IpUtils;
 //import com.tigerapi.framework.manager.AsyncManager;
 //import com.tigerapi.framework.manager.factory.AsyncFactory;
@@ -30,6 +34,7 @@ import com.tigerapi.common.utils.ServletUtils;
  * @author tigerapi
  */
 @Component
+@Slf4j
 public class LoginService
 {
     @Autowired
@@ -37,6 +42,12 @@ public class LoginService
 
     @Resource
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private MemberService memberService;
+
+    @Autowired
+    private WeChatService weChatService;
 //
 //    @Autowired
 //    private RedisCache redisCache;
@@ -48,7 +59,7 @@ public class LoginService
 //    private ISysConfigService configService;
 
     /**
-     * 登录验证
+     * 用户名密码登录验证
      *
      * @param username 用户名
      * @param password 密码
@@ -129,4 +140,44 @@ public class LoginService
 //        sysUser.setLoginDate(DateUtils.getNowDate());
 //        userService.updateUserProfile(sysUser);
 //    }
+
+    /**
+     * 微信登录
+     * @param code
+     * @return
+     */
+    public String wechatLogin(String code) throws Exception{
+        //参考 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
+        //去微信服务器请求 用 appid+appsecert+code 去微信服务器换回 openid+seeesin_key
+        //用户验证，根据返回的openid 去数据库校验是否存在，不存在则插入，存在则更新token与登录时间，然后返回member对象
+        //返回自定义登录态，jwt
+        JSONObject result = JSONObject.parseObject(weChatService.code2Session(code));
+//        Assert.notNull(result,"code 无效");
+//        Assert.isTrue(result.getInteger("errcode") == null && 0 == result.getInteger("errcode"), result.getString("errmsg"));
+        String openId = result.getString("openid");
+        String sessionKey = result.getString("session_key");
+        log.info("openId: {}", openId);
+        log.info("sessionKey: {}", sessionKey);
+        String username = "jerry";
+        Member member = memberService.findByUserName(username);
+        if (StringUtils.isNull(member))
+        {
+            log.info("登录用户：{} 不存在.", username);
+            throw new ServiceException("登录用户：" + username + " 不存在");
+        }
+        LoginUser loginUser = new LoginUser(member);
+        // 生成token
+        return tokenService.createToken(loginUser);
+    }
+
+    /**
+     * 微信获取手机号
+     * @param code
+     * @return
+     */
+    public String wechatGetPhoneNumber(String encryptedData, String iv) throws Exception{
+        //参考 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
+        //根据微信服务器端 phonenumber.getPhoneNumber 接口来返回手机号，接受 code 参数，此code与登录的code 不是一回事，不能混用
+        return weChatService.getPhoneNumber(encryptedData, iv);
+    }
 }

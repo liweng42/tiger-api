@@ -36,3 +36,7 @@ token:
   secret: abcdefghijklmnopqrstuvwxyz
   # 令牌有效期（默认30分钟）
   expireTime: 30
+
+weChat:
+  appId: wxb677b69ea11e169c
+  secret: 8abc9ed4871d91f0c4c99081f580295a

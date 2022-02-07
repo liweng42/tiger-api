@@ -3,6 +3,9 @@ package com.tigerapi.controller;
 import com.tigerapi.common.constant.Constants;
 import com.tigerapi.common.core.domain.AjaxResult;
 import com.tigerapi.common.core.domain.model.LoginParam;
+import com.tigerapi.common.core.domain.model.WeChatGetPhoneNumberParam;
+import com.tigerapi.common.core.domain.model.WeChatLoginParam;
+import com.tigerapi.common.utils.StringUtils;
 import com.tigerapi.framework.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +36,32 @@ public class LoginController {
         // 生成令牌
         String token = loginService.login(loginParam.getUsername(), loginParam.getPassword());
         ajax.put(Constants.TOKEN, token);
+        return ajax;
+    }
+
+    @PostMapping("/wechat/login")
+    public AjaxResult wechatLogin(@RequestBody WeChatLoginParam weChatLoginParam) throws Exception {
+        if (StringUtils.isEmpty(weChatLoginParam.getCode())){
+            return AjaxResult.error("code 不能为空!");
+        }
+        AjaxResult ajax = AjaxResult.success();
+        // 生成令牌
+        String token = loginService.wechatLogin(weChatLoginParam.getCode());
+        ajax.put(Constants.TOKEN, token);
+        return ajax;
+    }
+
+    @PostMapping("/wechat/getPhoneNumber")
+    public  AjaxResult wechatGetPhoneNumber(@RequestBody WeChatGetPhoneNumberParam weChatGetPhoneNumberParam) throws Exception{
+        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getEncryptedData())){
+            return AjaxResult.error("encryptedData 不能为空!");
+        }
+        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getIv())){
+            return AjaxResult.error("iv 不能为空!");
+        }
+        AjaxResult ajax = AjaxResult.success();
+        String phoneNumber = loginService.wechatGetPhoneNumber(weChatGetPhoneNumberParam.getEncryptedData(), weChatGetPhoneNumberParam.getIv());
+        ajax.put("phoneNumber", phoneNumber);
         return ajax;
     }
 }
