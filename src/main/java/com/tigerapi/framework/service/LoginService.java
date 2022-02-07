@@ -2,10 +2,14 @@ package com.tigerapi.framework.service;
 
 import javax.annotation.Resource;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tigerapi.common.core.domain.model.WeChatCode2SessionResponse;
 import com.tigerapi.common.utils.StringUtils;
 import com.tigerapi.entity.Member;
+import com.tigerapi.entity.SocialAccount;
 import com.tigerapi.service.MemberService;
+import com.tigerapi.service.SocialAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +52,9 @@ public class LoginService
 
     @Autowired
     private WeChatService weChatService;
+
+    @Autowired
+    private SocialAccountService socialAccountService;
 //
 //    @Autowired
 //    private RedisCache redisCache;
@@ -147,17 +154,10 @@ public class LoginService
      * @return
      */
     public String wechatLogin(String code) throws Exception{
-        //参考 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
-        //去微信服务器请求 用 appid+appsecert+code 去微信服务器换回 openid+seeesin_key
         //用户验证，根据返回的openid 去数据库校验是否存在，不存在则插入，存在则更新token与登录时间，然后返回member对象
         //返回自定义登录态，jwt
-        JSONObject result = JSONObject.parseObject(weChatService.code2Session(code));
-//        Assert.notNull(result,"code 无效");
-//        Assert.isTrue(result.getInteger("errcode") == null && 0 == result.getInteger("errcode"), result.getString("errmsg"));
-        String openId = result.getString("openid");
-        String sessionKey = result.getString("session_key");
-        log.info("openId: {}", openId);
-        log.info("sessionKey: {}", sessionKey);
+        WeChatCode2SessionResponse weChatCode2SessionResponse = weChatService.code2Session(code);
+
         String username = "jerry";
         Member member = memberService.findByUserName(username);
         if (StringUtils.isNull(member))
@@ -170,14 +170,52 @@ public class LoginService
         return tokenService.createToken(loginUser);
     }
 
+    public String wechatGetOpenId(String code) throws Exception {
+        WeChatCode2SessionResponse weChatCode2SessionResponse = weChatService.code2Session(code);
+        if (weChatCode2SessionResponse != null && weChatCode2SessionResponse.getErrcode() == 0 ){
+            SocialAccount socialAccount = new SocialAccount();
+            socialAccount.setUniqueId(weChatCode2SessionResponse.getOpenid());
+            socialAccount.setSessionKey(weChatCode2SessionResponse.getSession_key());
+
+            //查询openId是否存在，如果不存在新增，否则修改
+            SocialAccount socialAccountData = socialAccountService.findByUniqueId(weChatCode2SessionResponse.getOpenid());
+            log.info("wechatGetOpenId.socialUserData===" + JSON.toJSONString(socialAccountData));
+            if (socialAccountData == null) {
+//                if (StringUtils.isNotBlank(mobile)) {
+//                    Users users = usersService.selectUserByMobile(mobile);
+//                    log.info("getOpenId.users===" + JSON.toJSONString(users));
+//                    if (users != null) {
+//                        socialUser.setUser_id(users.getId());
+//                    }
+//                }
+//                socialUser.setLoginPluginId("moleshop-api-wechat");
+//                socialUserService.saveSocialUser(socialUser);
+                socialAccountService.insert(socialAccount);
+            }
+        }
+        return weChatCode2SessionResponse.getOpenid();
+
+//        LoginUser loginUser = new LoginUser(member);
+//        // 生成token
+//        return tokenService.createToken(loginUser);
+    }
+
     /**
      * 微信获取手机号
      * @param code
      * @return
      */
-    public String wechatGetPhoneNumber(String encryptedData, String iv) throws Exception{
+    public String wechatGetPhoneNumber(String encryptedData, String iv, String openId) throws Exception{
         //参考 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
-        //根据微信服务器端 phonenumber.getPhoneNumber 接口来返回手机号，接受 code 参数，此code与登录的code 不是一回事，不能混用
-        return weChatService.getPhoneNumber(encryptedData, iv);
+        //根据opendId去查询sessionKey
+        //查询openId是否存在，如果不存在新增，否则修改
+        SocialAccount socialAccount = socialAccountService.findByUniqueId(openId);
+        if (socialAccount != null) {
+            return weChatService.getPhoneNumber(encryptedData, iv, socialAccount.getSessionKey());
+        }
+        else {
+            return null;
+        }
+
     }
 }

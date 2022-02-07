@@ -39,15 +39,16 @@ public class LoginController {
         return ajax;
     }
 
-    @PostMapping("/wechat/login")
-    public AjaxResult wechatLogin(@RequestBody WeChatLoginParam weChatLoginParam) throws Exception {
+    @PostMapping("/wechat/getOpenId")
+    public AjaxResult wechatGetOpenId(@RequestBody WeChatLoginParam weChatLoginParam) throws Exception {
         if (StringUtils.isEmpty(weChatLoginParam.getCode())){
             return AjaxResult.error("code 不能为空!");
         }
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
-        String token = loginService.wechatLogin(weChatLoginParam.getCode());
-        ajax.put(Constants.TOKEN, token);
+        String openId = loginService.wechatLogin(weChatLoginParam.getCode());
+        ajax.put("openId", openId);
+//        ajax.put(Constants.TOKEN, token);
         return ajax;
     }
 
@@ -59,8 +60,11 @@ public class LoginController {
         if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getIv())){
             return AjaxResult.error("iv 不能为空!");
         }
+        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getOpenId())){
+            return AjaxResult.error("openId 不能为空!");
+        }
         AjaxResult ajax = AjaxResult.success();
-        String phoneNumber = loginService.wechatGetPhoneNumber(weChatGetPhoneNumberParam.getEncryptedData(), weChatGetPhoneNumberParam.getIv());
+        String phoneNumber = loginService.wechatGetPhoneNumber(weChatGetPhoneNumberParam.getEncryptedData(), weChatGetPhoneNumberParam.getIv(), weChatGetPhoneNumberParam.getOpenId());
         ajax.put("phoneNumber", phoneNumber);
         return ajax;
     }

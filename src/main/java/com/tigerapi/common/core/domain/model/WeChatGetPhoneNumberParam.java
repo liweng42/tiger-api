@@ -12,4 +12,5 @@ import lombok.Data;
 public class WeChatGetPhoneNumberParam {
     private String encryptedData;
     private String iv;
+    private String openId;
 }

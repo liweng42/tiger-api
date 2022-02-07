@@ -45,4 +45,6 @@ public interface SocialAccountService {
      */
     boolean deleteById(Long id);
 
+    SocialAccount findByUniqueId(String uniqueId);
+
 }

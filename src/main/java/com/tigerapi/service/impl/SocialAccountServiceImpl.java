@@ -5,6 +5,7 @@ import com.tigerapi.entity.SocialAccountExample;
 import com.tigerapi.mapper.SocialAccountMapper;
 import com.tigerapi.service.SocialAccountService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -70,5 +71,16 @@ public class SocialAccountServiceImpl implements SocialAccountService {
     @Override
     public boolean deleteById(Long id) {
         return this.socialAccountMapper.deleteByPrimaryKey(id) > 0;
+    }
+
+    @Override
+    public SocialAccount findByUniqueId(String uniqueId) {
+        SocialAccountExample example = new SocialAccountExample();
+        example.createCriteria().andUniqueIdEqualTo(uniqueId);
+        List<SocialAccount> socialAccountList = socialAccountMapper.selectByExample(example);
+        if (!CollectionUtils.isEmpty(socialAccountList)) {
+            return socialAccountList.get(0);
+        }
+        return null;
     }
 }
