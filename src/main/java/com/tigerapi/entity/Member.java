@@ -16,22 +16,12 @@ public class Member implements Serializable {
     private Long id;
 
     /**
-     * 用户名
+     * 微信openid
      */
-    @ApiModelProperty(value="用户名")
-    private String userName;
+    @ApiModelProperty(value="微信openid")
+    private String openId;
 
-    /**
-     * 密码
-     */
-    @ApiModelProperty(value="密码")
-    private String password;
-
-    /**
-     * 用户邮箱
-     */
-    @ApiModelProperty(value="用户邮箱")
-    private String email;
+    private String sessionKey;
 
     /**
      * 手机号
@@ -46,10 +36,34 @@ public class Member implements Serializable {
     private String avatarUrl;
 
     /**
-     * 盐加密
+     * 昵称
      */
-    @ApiModelProperty(value="盐加密")
-    private String salt;
+    @ApiModelProperty(value="昵称")
+    private String nickName;
+
+    /**
+     * 性别 0：未知、1：男、2：女
+     */
+    @ApiModelProperty(value="性别 0：未知、1：男、2：女")
+    private Boolean gender;
+
+    /**
+     * 国家
+     */
+    @ApiModelProperty(value="国家")
+    private String country;
+
+    /**
+     * 省份
+     */
+    @ApiModelProperty(value="省份")
+    private String province;
+
+    /**
+     * 城市
+     */
+    @ApiModelProperty(value="城市")
+    private String city;
 
     /**
      * 创建人

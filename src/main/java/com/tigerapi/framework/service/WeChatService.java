@@ -85,6 +85,7 @@ public class WeChatService {
 //            Assert.isTrue(0 == phoneNumberInfo.getInteger("errcode"), phoneNumberInfo.getString("errmsg"));
             String phoneNumber = phoneNumberInfo.getString("phoneNumber");
             log.info("phoneNumber: {}", phoneNumber);
+            return phoneNumber;
         }
         return null;
     }

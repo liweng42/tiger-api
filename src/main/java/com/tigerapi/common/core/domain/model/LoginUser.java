@@ -54,12 +54,12 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return "";
     }
 
     @Override
     public String getUsername() {
-        return member.getUserName();
+        return "";
     }
 
     @Override

@@ -22,8 +22,8 @@ public class RegisterService {
 
     public String register(String username, String password){
         Member member = new Member();
-        member.setUserName(username);
-        member.setPassword(SecurityUtils.encryptPassword(password));
+//        member.setUserName(username);
+//        member.setPassword(SecurityUtils.encryptPassword(password));
         member.setCreateBy("system");
         member.setCreateTime(new Date());
         member.setUpdateBy("system");

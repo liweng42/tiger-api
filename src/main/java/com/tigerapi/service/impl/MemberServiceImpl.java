@@ -52,7 +52,9 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public Member update(Member member) {
-//        this.memberMapper.update(member);
+        MemberExample example = new MemberExample();
+        example.createCriteria().andIdEqualTo(member.getId());
+        this.memberMapper.updateByExampleSelective(member, example);
         return this.queryById(member.getId());
     }
 
@@ -68,16 +70,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findByUserName(String userName) {
-//        MemberExample record = new MemberExample();
-//        record.createCriteria().andUserNameEqualTo(userName);
-//        List<Member> list = this.memberMapper.selectByExample(record);
-//        if (!list.isEmpty()){
-//            return list.get(0);
-//        }
-//        else {
-//            return null;
-//        }
-        return memberMapper.selectByUserName(userName);
+    public Member selectByOpenId(String openId) {
+        MemberExample record = new MemberExample();
+        record.createCriteria().andOpenIdEqualTo(openId);
+        List<Member> list = this.memberMapper.selectByExample(record);
+        if (!list.isEmpty()){
+            return list.get(0);
+        }
+        else {
+            return null;
+        }
     }
 }

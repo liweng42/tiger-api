@@ -43,6 +43,8 @@ public interface MemberService {
      */
     boolean deleteById(Long id);
 
-    Member findByUserName(String userName);
+    Member selectByOpenId(String openId);
+
+
 
 }

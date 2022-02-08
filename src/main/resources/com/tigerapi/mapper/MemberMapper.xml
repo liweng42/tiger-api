@@ -3,12 +3,15 @@
 <mapper namespace="com.tigerapi.mapper.MemberMapper">
   <resultMap id="BaseResultMap" type="com.tigerapi.entity.Member">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="session_key" jdbcType="VARCHAR" property="sessionKey" />
     <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
     <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl" />
-    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="gender" jdbcType="BOOLEAN" property="gender" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -73,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_name, `password`, email, phone_number, avatar_url, salt, create_by, create_time, 
-    update_by, update_time
+    id, open_id, session_key, phone_number, avatar_url, nick_name, gender, country, province, 
+    city, create_by, create_time, update_by, update_time
   </sql>
   <select id="selectByExample" parameterType="com.tigerapi.entity.MemberExample" resultMap="BaseResultMap">
     select
@@ -107,26 +110,25 @@
     </if>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.Member" useGeneratedKeys="true">
-    insert into member (user_name, `password`, email, 
-      phone_number, avatar_url, salt, 
+    insert into member (open_id, session_key, phone_number, 
+      avatar_url, nick_name, gender, 
+      country, province, city, 
       create_by, create_time, update_by, 
       update_time)
-    values (#{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{phoneNumber,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, 
+    values (#{openId,jdbcType=VARCHAR}, #{sessionKey,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, 
+      #{avatarUrl,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{gender,jdbcType=BOOLEAN}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.tigerapi.entity.Member" useGeneratedKeys="true">
     insert into member
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        user_name,
+      <if test="openId != null">
+        open_id,
       </if>
-      <if test="password != null">
-        `password`,
-      </if>
-      <if test="email != null">
-        email,
+      <if test="sessionKey != null">
+        session_key,
       </if>
       <if test="phoneNumber != null">
         phone_number,
@@ -134,8 +136,20 @@
       <if test="avatarUrl != null">
         avatar_url,
       </if>
-      <if test="salt != null">
-        salt,
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
       </if>
       <if test="createBy != null">
         create_by,
@@ -151,14 +165,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        #{email,jdbcType=VARCHAR},
+      <if test="sessionKey != null">
+        #{sessionKey,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         #{phoneNumber,jdbcType=VARCHAR},
@@ -166,8 +177,20 @@
       <if test="avatarUrl != null">
         #{avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="salt != null">
-        #{salt,jdbcType=VARCHAR},
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=BOOLEAN},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         #{createBy,jdbcType=VARCHAR},
@@ -195,14 +218,11 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.userName != null">
-        user_name = #{record.userName,jdbcType=VARCHAR},
+      <if test="record.openId != null">
+        open_id = #{record.openId,jdbcType=VARCHAR},
       </if>
-      <if test="record.password != null">
-        `password` = #{record.password,jdbcType=VARCHAR},
-      </if>
-      <if test="record.email != null">
-        email = #{record.email,jdbcType=VARCHAR},
+      <if test="record.sessionKey != null">
+        session_key = #{record.sessionKey,jdbcType=VARCHAR},
       </if>
       <if test="record.phoneNumber != null">
         phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
@@ -210,8 +230,20 @@
       <if test="record.avatarUrl != null">
         avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.salt != null">
-        salt = #{record.salt,jdbcType=VARCHAR},
+      <if test="record.nickName != null">
+        nick_name = #{record.nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+        gender = #{record.gender,jdbcType=BOOLEAN},
+      </if>
+      <if test="record.country != null">
+        country = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
       </if>
       <if test="record.createBy != null">
         create_by = #{record.createBy,jdbcType=VARCHAR},
@@ -233,12 +265,15 @@
   <update id="updateByExample" parameterType="map">
     update member
     set id = #{record.id,jdbcType=BIGINT},
-      user_name = #{record.userName,jdbcType=VARCHAR},
-      `password` = #{record.password,jdbcType=VARCHAR},
-      email = #{record.email,jdbcType=VARCHAR},
+      open_id = #{record.openId,jdbcType=VARCHAR},
+      session_key = #{record.sessionKey,jdbcType=VARCHAR},
       phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
       avatar_url = #{record.avatarUrl,jdbcType=VARCHAR},
-      salt = #{record.salt,jdbcType=VARCHAR},
+      nick_name = #{record.nickName,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=BOOLEAN},
+      country = #{record.country,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=VARCHAR},
@@ -250,14 +285,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.tigerapi.entity.Member">
     update member
     <set>
-      <if test="userName != null">
-        user_name = #{userName,jdbcType=VARCHAR},
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
-      <if test="password != null">
-        `password` = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null">
-        email = #{email,jdbcType=VARCHAR},
+      <if test="sessionKey != null">
+        session_key = #{sessionKey,jdbcType=VARCHAR},
       </if>
       <if test="phoneNumber != null">
         phone_number = #{phoneNumber,jdbcType=VARCHAR},
@@ -265,8 +297,20 @@
       <if test="avatarUrl != null">
         avatar_url = #{avatarUrl,jdbcType=VARCHAR},
       </if>
-      <if test="salt != null">
-        salt = #{salt,jdbcType=VARCHAR},
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=BOOLEAN},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
       </if>
       <if test="createBy != null">
         create_by = #{createBy,jdbcType=VARCHAR},
@@ -285,27 +329,19 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tigerapi.entity.Member">
     update member
-    set user_name = #{userName,jdbcType=VARCHAR},
-      `password` = #{password,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
+    set open_id = #{openId,jdbcType=VARCHAR},
+      session_key = #{sessionKey,jdbcType=VARCHAR},
       phone_number = #{phoneNumber,jdbcType=VARCHAR},
       avatar_url = #{avatarUrl,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BOOLEAN},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <sql id="selectMemberVo">
-    select * from
-  </sql>
-
-  <select id="selectByUserName" parameterType="String" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from member
-    where user_name = #{userName}
-  </select>
 </mapper>
