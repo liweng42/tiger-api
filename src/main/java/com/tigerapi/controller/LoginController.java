@@ -9,10 +9,13 @@ import com.tigerapi.common.core.domain.model.WeChatUserProfileParam;
 import com.tigerapi.common.utils.StringUtils;
 import com.tigerapi.framework.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -43,10 +46,10 @@ public class LoginController {
 //    }
 
     @PostMapping("/wechat/getOpenId")
-    public AjaxResult wechatGetOpenId(@RequestBody WeChatLoginParam weChatLoginParam) throws Exception {
-        if (StringUtils.isEmpty(weChatLoginParam.getCode())){
-            return AjaxResult.error("code 不能为空!");
-        }
+    public AjaxResult wechatGetOpenId(@RequestBody @Validated WeChatLoginParam weChatLoginParam) throws Exception {
+//        if (StringUtils.isEmpty(weChatLoginParam.getCode())){
+//            return AjaxResult.error("code 不能为空!");
+//        }
         AjaxResult ajax = AjaxResult.success();
         // 返回 openId
         String openId = loginService.wechatGetOpenId(weChatLoginParam.getCode());
@@ -56,16 +59,16 @@ public class LoginController {
     }
 
     @PostMapping("/wechat/getPhoneNumber")
-    public  AjaxResult wechatGetPhoneNumber(@RequestBody WeChatGetPhoneNumberParam weChatGetPhoneNumberParam) throws Exception{
-        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getEncryptedData())){
-            return AjaxResult.error("encryptedData 不能为空!");
-        }
-        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getIv())){
-            return AjaxResult.error("iv 不能为空!");
-        }
-        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getOpenId())){
-            return AjaxResult.error("openId 不能为空!");
-        }
+    public  AjaxResult wechatGetPhoneNumber(@RequestBody @Validated WeChatGetPhoneNumberParam weChatGetPhoneNumberParam) throws Exception{
+//        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getEncryptedData())){
+//            return AjaxResult.error("encryptedData 不能为空!");
+//        }
+//        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getIv())){
+//            return AjaxResult.error("iv 不能为空!");
+//        }
+//        if (StringUtils.isEmpty(weChatGetPhoneNumberParam.getOpenId())){
+//            return AjaxResult.error("openId 不能为空!");
+//        }
         AjaxResult ajax = AjaxResult.success();
         Map<String, String> map = loginService.wechatGetPhoneNumber(weChatGetPhoneNumberParam.getEncryptedData(), weChatGetPhoneNumberParam.getIv(), weChatGetPhoneNumberParam.getOpenId());
         ajax.put(Constants.PHONE_NUMBER, map.get(Constants.PHONE_NUMBER));
@@ -73,10 +76,12 @@ public class LoginController {
         return ajax;
     }
 
-//    @PostMapping("/wechat/refreshToken")
-//    public AjaxResult refreshToken(){
-//
-//    }
+    @PostMapping("/wechat/refreshToken")
+    public AjaxResult refreshToken(HttpServletRequest request) throws Exception{
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put(Constants.TOKEN, loginService.refreshToken(request));
+        return ajax;
+    }
 
 //    public AjaxResult wechatSyncUserProfile(WeChatUserProfileParam weChatUserProfileParam) {
 //

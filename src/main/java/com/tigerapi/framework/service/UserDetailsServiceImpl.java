@@ -57,9 +57,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
         //return createLoginUser(member);
         throw new UsernameNotFoundException("不支持根据用户名查找！");
     }
-
-    public UserDetails createLoginUser(Member member)
-    {
-        return new LoginUser(member);
-    }
+//
+//    public UserDetails createLoginUser()
+//    {
+//        return new LoginUser();
+//    }
 }

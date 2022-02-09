@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.tigerapi.common.core.domain.model.WeChatCode2SessionResponse;
+import com.tigerapi.common.exception.ServiceException;
 import com.tigerapi.common.utils.http.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -64,7 +65,10 @@ public class WeChatService {
         WeChatCode2SessionResponse weChatCode2SessionResponse = objectMapper.readValue(result, WeChatCode2SessionResponse.class);
         log.info("code2Session.weChatCode2SessionResponse===" + JSON.toJSONString(weChatCode2SessionResponse));
 //        Assert.notNull(result,"code 无效");
-//        Assert.isTrue(result.getInteger("errcode") == null && 0 == result.getInteger("errcode"), result.getString("errmsg"));
+//        Assert.isTrue(weChatCode2SessionResponse.getErrcode() == 0, weChatCode2SessionResponse.getErrmsg());
+        if (weChatCode2SessionResponse.getErrcode() != 0){
+            throw new ServiceException("微信返回异常！"+ weChatCode2SessionResponse.getErrmsg());
+        }
         log.info("openId: {}", weChatCode2SessionResponse.getOpenid());
         log.info("sessionKey: {}", weChatCode2SessionResponse.getSession_key());
         return weChatCode2SessionResponse;

@@ -1,6 +1,7 @@
 package com.tigerapi.framework.service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.tigerapi.common.constant.Constants;
@@ -211,7 +212,7 @@ public class LoginService
             member.setUpdateTime(new Date());
             memberService.update(member);
             map.put(Constants.PHONE_NUMBER, phoneNumber);
-            LoginUser loginUser = new LoginUser(member);
+            LoginUser loginUser = new LoginUser(member.getId(), member.getOpenId(), member.getSessionKey());
             // 生成token
             map.put(Constants.TOKEN, tokenService.createToken(loginUser));
             return map;
@@ -221,4 +222,10 @@ public class LoginService
         }
 
     }
+
+    public String refreshToken(HttpServletRequest request) throws Exception {
+        LoginUser loginUser = tokenService.getLoginUser(request);
+        return tokenService.createToken(loginUser);
+    }
+
 }

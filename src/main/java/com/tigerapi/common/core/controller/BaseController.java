@@ -3,8 +3,10 @@ package com.tigerapi.common.core.controller;
 import com.github.pagehelper.PageInfo;
 import com.tigerapi.common.constant.HttpStatus;
 import com.tigerapi.common.core.domain.AjaxResult;
+import com.tigerapi.common.core.domain.model.LoginUser;
 import com.tigerapi.common.core.page.TableDataInfo;
 import com.tigerapi.common.utils.PageUtils;
+import com.tigerapi.common.utils.SecurityUtils;
 import com.tigerapi.common.utils.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -105,13 +107,13 @@ public class BaseController {
         return StringUtils.format("redirect:{}", url);
     }
 
-//    /**
-//     * 获取用户缓存信息
-//     */
-//    public LoginUser getLoginUser()
-//    {
-//        return SecurityUtils.getLoginUser();
-//    }
+    /**
+     * 获取用户缓存信息
+     */
+    public LoginUser getLoginUser()
+    {
+        return SecurityUtils.getLoginUser();
+    }
 //
 //    /**
 //     * 获取登录用户id
@@ -121,13 +123,7 @@ public class BaseController {
 //        return getLoginUser().getUserId();
 //    }
 //
-//    /**
-//     * 获取登录部门id
-//     */
-//    public Long getDeptId()
-//    {
-//        return getLoginUser().getDeptId();
-//    }
+
 //
 //    /**
 //     * 获取登录用户名

@@ -33,9 +33,9 @@ token:
   # 令牌自定义标识
   header: Authorization
   # 令牌密钥
-  secret: abcdefghijklmnopqrstuvwxyz
+  secret: e8d20251fded41e9858a9839740f4b84
   # 令牌有效期（默认30分钟）
-  expireTime: 30
+  expireTime: 3
 
 weChat:
   appId: wxb677b69ea11e169c

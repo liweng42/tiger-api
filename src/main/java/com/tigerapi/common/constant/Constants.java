@@ -95,10 +95,11 @@ public class Constants {
      */
     public static final String TOKEN_PREFIX = "Bearer ";
 
-    /**
-     * 令牌前缀
-     */
     public static final String LOGIN_USER_KEY = "login_user_key";
+
+    public static final String LOGIN_USER_OPENID = "login_user_openid";
+
+    public static final String LOGIN_USER_ID = "login_user_id";
 
     /**
      * 用户ID
@@ -170,4 +171,7 @@ public class Constants {
      * 用户默认的角色
      */
     public static final String ROLE_MEMBER = "ROLE_MEMBER";
+
+
+    public static final String TOKEN_AES_KEY = "B8EEFXFD3799788B";
 }
