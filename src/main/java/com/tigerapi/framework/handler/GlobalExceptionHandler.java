@@ -57,7 +57,7 @@ public class GlobalExceptionHandler
     public AjaxResult handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request)
     {
         log.error(e.getMessage(), e);
-        Integer code = -1;
+        Integer code = HttpStatus.BAD_REQUEST;
         return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
     }
 
