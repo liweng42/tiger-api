@@ -5,6 +5,7 @@ import com.tigerapi.common.core.domain.AjaxResult;
 import com.tigerapi.common.exception.ServiceException;
 import com.tigerapi.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
