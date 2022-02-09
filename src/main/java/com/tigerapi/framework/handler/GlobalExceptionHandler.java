@@ -51,6 +51,19 @@ public class GlobalExceptionHandler
     }
 
     /**
+     * 无效参数异常，Srping的Assert.isTrue等方法会抛出
+     */
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public AjaxResult handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request)
+    {
+        log.error(e.getMessage(), e);
+        Integer code = -1;
+        return StringUtils.isNotNull(code) ? AjaxResult.error(code, e.getMessage()) : AjaxResult.error(e.getMessage());
+    }
+
+
+
+    /**
      * 拦截未知的运行时异常
      */
     @ExceptionHandler(RuntimeException.class)

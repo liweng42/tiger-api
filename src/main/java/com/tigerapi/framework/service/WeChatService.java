@@ -55,7 +55,7 @@ public class WeChatService {
      * @return 请求结果
      * @throws Exception
      */
-    public WeChatCode2SessionResponse code2Session(String code) throws Exception{
+    public WeChatCode2SessionResponse code2Session(String code) throws Exception {
         //参考 https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
         //去微信服务器请求 用 appid+appsecert+code 去微信服务器换回 openid+seeesin_key
         String params = "appid=" + appId + "&secret=" + secret + "&js_code=" + code + "&grant_type=authorization_code";
@@ -65,10 +65,10 @@ public class WeChatService {
         WeChatCode2SessionResponse weChatCode2SessionResponse = objectMapper.readValue(result, WeChatCode2SessionResponse.class);
         log.info("code2Session.weChatCode2SessionResponse===" + JSON.toJSONString(weChatCode2SessionResponse));
 //        Assert.notNull(result,"code 无效");
-//        Assert.isTrue(weChatCode2SessionResponse.getErrcode() == 0, weChatCode2SessionResponse.getErrmsg());
-        if (weChatCode2SessionResponse.getErrcode() != 0){
-            throw new ServiceException("微信返回异常！"+ weChatCode2SessionResponse.getErrmsg());
-        }
+        Assert.isTrue(weChatCode2SessionResponse.getErrcode() == 0, weChatCode2SessionResponse.getErrmsg());
+//        if (weChatCode2SessionResponse.getErrcode() != 0){
+//            throw new ServiceException("微信返回异常！"+ weChatCode2SessionResponse.getErrmsg());
+//        }
         log.info("openId: {}", weChatCode2SessionResponse.getOpenid());
         log.info("sessionKey: {}", weChatCode2SessionResponse.getSession_key());
         return weChatCode2SessionResponse;
