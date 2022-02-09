@@ -108,7 +108,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/profile/**"
+                        "/profile/**",
+                        "/favicon.ico"
                 ).permitAll()
 //                .antMatchers("/test/**").anonymous()
                 .antMatchers("/swagger-ui.html").anonymous()
@@ -116,7 +117,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
-
+                //跨域请求会先进行一次options请求
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
